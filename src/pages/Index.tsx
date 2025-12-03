@@ -2,6 +2,7 @@ import Layout from '@/components/layout/Layout';
 import HeroSection from '@/components/home/HeroSection';
 import TrendingSection from '@/components/home/TrendingSection';
 import AnnouncementsSection from '@/components/home/AnnouncementsSection';
+import ParallaxSection from '@/components/home/ParallaxSection';
 import EventsSection from '@/components/home/EventsSection';
 import SpacesSection from '@/components/home/SpacesSection';
 
@@ -10,6 +11,7 @@ const Index = () => {
     <Layout>
       <HeroSection />
       <TrendingSection />
+      <ParallaxSection />
       <AnnouncementsSection />
       <EventsSection />
       <SpacesSection />
