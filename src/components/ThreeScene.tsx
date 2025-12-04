@@ -3,139 +3,203 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Main gear/wheel - represents automotive industry
-function GearWheel() {
-  const gearRef = useRef<THREE.Group>(null);
+// Stylized FUSO Truck
+function FusoTruck() {
+  const truckRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (gearRef.current) {
-      gearRef.current.rotation.z = state.clock.elapsedTime * 0.3;
+    if (truckRef.current) {
+      truckRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.15;
+      truckRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
   });
 
-  const teeth = useMemo(() => {
-    const toothCount = 12;
-    const toothPositions = [];
-    for (let i = 0; i < toothCount; i++) {
-      const angle = (i / toothCount) * Math.PI * 2;
-      toothPositions.push({
-        x: Math.cos(angle) * 1.3,
-        y: Math.sin(angle) * 1.3,
-        rotation: angle,
-      });
-    }
-    return toothPositions;
-  }, []);
-
   return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-      <group ref={gearRef}>
-        {/* Main gear body */}
-        <mesh>
-          <cylinderGeometry args={[1.2, 1.2, 0.3, 32]} />
-          <meshStandardMaterial
-            color="#E60012"
-            metalness={0.9}
-            roughness={0.2}
-          />
+    <Float speed={1} rotationIntensity={0.1} floatIntensity={0.3}>
+      <group ref={truckRef} scale={0.55} position={[0, -0.3, 0]} rotation={[0.1, -0.4, 0]}>
+        {/* Cabin */}
+        <mesh position={[-1.2, 0.6, 0]}>
+          <boxGeometry args={[1.4, 1.4, 1.6]} />
+          <meshStandardMaterial color="#E60012" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Center hub */}
-        <mesh position={[0, 0.16, 0]}>
-          <cylinderGeometry args={[0.4, 0.4, 0.1, 32]} />
-          <meshStandardMaterial
-            color="#333333"
-            metalness={0.95}
-            roughness={0.1}
-          />
+        
+        {/* Cabin roof */}
+        <mesh position={[-1.2, 1.4, 0]}>
+          <boxGeometry args={[1.3, 0.15, 1.5]} />
+          <meshStandardMaterial color="#CC0010" metalness={0.85} roughness={0.2} />
         </mesh>
-        {/* Gear teeth */}
-        {teeth.map((tooth, i) => (
-          <mesh
-            key={i}
-            position={[tooth.x, 0, tooth.y]}
-            rotation={[0, -tooth.rotation, 0]}
-          >
-            <boxGeometry args={[0.25, 0.3, 0.35]} />
-            <meshStandardMaterial
-              color="#E60012"
-              metalness={0.9}
-              roughness={0.2}
-            />
+        
+        {/* Windshield */}
+        <mesh position={[-0.45, 0.7, 0]}>
+          <boxGeometry args={[0.08, 0.9, 1.3]} />
+          <meshStandardMaterial color="#1a1a2e" metalness={0.3} roughness={0.1} transparent opacity={0.8} />
+        </mesh>
+        
+        {/* Side windows */}
+        <mesh position={[-1.2, 0.7, 0.82]}>
+          <boxGeometry args={[1, 0.7, 0.05]} />
+          <meshStandardMaterial color="#1a1a2e" metalness={0.3} roughness={0.1} transparent opacity={0.7} />
+        </mesh>
+        <mesh position={[-1.2, 0.7, -0.82]}>
+          <boxGeometry args={[1, 0.7, 0.05]} />
+          <meshStandardMaterial color="#1a1a2e" metalness={0.3} roughness={0.1} transparent opacity={0.7} />
+        </mesh>
+        
+        {/* Grille */}
+        <mesh position={[-0.42, 0.1, 0]}>
+          <boxGeometry args={[0.1, 0.6, 1.4]} />
+          <meshStandardMaterial color="#333333" metalness={0.9} roughness={0.1} />
+        </mesh>
+        
+        {/* Headlights */}
+        <mesh position={[-0.42, 0.2, 0.5]}>
+          <boxGeometry args={[0.12, 0.25, 0.3]} />
+          <meshStandardMaterial color="#ffffff" metalness={0.5} roughness={0.2} emissive="#ffffff" emissiveIntensity={0.3} />
+        </mesh>
+        <mesh position={[-0.42, 0.2, -0.5]}>
+          <boxGeometry args={[0.12, 0.25, 0.3]} />
+          <meshStandardMaterial color="#ffffff" metalness={0.5} roughness={0.2} emissive="#ffffff" emissiveIntensity={0.3} />
+        </mesh>
+        
+        {/* Cargo bed frame */}
+        <mesh position={[1.3, 0.3, 0]}>
+          <boxGeometry args={[3.2, 0.15, 1.7]} />
+          <meshStandardMaterial color="#444444" metalness={0.85} roughness={0.2} />
+        </mesh>
+        
+        {/* Cargo container */}
+        <mesh position={[1.3, 1.1, 0]}>
+          <boxGeometry args={[3, 1.4, 1.6]} />
+          <meshStandardMaterial color="#555555" metalness={0.7} roughness={0.3} />
+        </mesh>
+        
+        {/* Cargo container accent stripe */}
+        <mesh position={[1.3, 1.1, 0.81]}>
+          <boxGeometry args={[2.8, 0.2, 0.02]} />
+          <meshStandardMaterial color="#E60012" metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[1.3, 1.1, -0.81]}>
+          <boxGeometry args={[2.8, 0.2, 0.02]} />
+          <meshStandardMaterial color="#E60012" metalness={0.8} roughness={0.2} />
+        </mesh>
+        
+        {/* Chassis */}
+        <mesh position={[0.5, -0.25, 0]}>
+          <boxGeometry args={[4.5, 0.2, 0.8]} />
+          <meshStandardMaterial color="#222222" metalness={0.9} roughness={0.2} />
+        </mesh>
+        
+        {/* Front wheels */}
+        <group position={[-1, -0.5, 0.9]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.45, 0.45, 0.3, 24]} />
+            <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.7} />
           </mesh>
-        ))}
-        {/* Spokes */}
-        {[0, 1, 2, 3, 4, 5].map((i) => (
-          <mesh
-            key={`spoke-${i}`}
-            rotation={[Math.PI / 2, 0, (i / 6) * Math.PI * 2]}
-            position={[0, 0, 0]}
-          >
-            <boxGeometry args={[0.15, 1.8, 0.15]} />
-            <meshStandardMaterial
-              color="#444444"
-              metalness={0.8}
-              roughness={0.3}
-            />
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.25, 0.25, 0.32, 16]} />
+            <meshStandardMaterial color="#666666" metalness={0.9} roughness={0.1} />
           </mesh>
-        ))}
+        </group>
+        <group position={[-1, -0.5, -0.9]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.45, 0.45, 0.3, 24]} />
+            <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.7} />
+          </mesh>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.25, 0.25, 0.32, 16]} />
+            <meshStandardMaterial color="#666666" metalness={0.9} roughness={0.1} />
+          </mesh>
+        </group>
+        
+        {/* Rear wheels (dual) */}
+        <group position={[1.8, -0.5, 1]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.5, 0.5, 0.4, 24]} />
+            <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.7} />
+          </mesh>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.3, 0.3, 0.42, 16]} />
+            <meshStandardMaterial color="#666666" metalness={0.9} roughness={0.1} />
+          </mesh>
+        </group>
+        <group position={[1.8, -0.5, -1]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.5, 0.5, 0.4, 24]} />
+            <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.7} />
+          </mesh>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.3, 0.3, 0.42, 16]} />
+            <meshStandardMaterial color="#666666" metalness={0.9} roughness={0.1} />
+          </mesh>
+        </group>
+        
+        {/* Exhaust pipe */}
+        <mesh position={[-1.8, 0.8, 0.7]} rotation={[0, 0, 0]}>
+          <cylinderGeometry args={[0.08, 0.08, 1.2, 12]} />
+          <meshStandardMaterial color="#444444" metalness={0.9} roughness={0.2} />
+        </mesh>
+        
+        {/* Side mirrors */}
+        <mesh position={[-0.6, 0.8, 1]}>
+          <boxGeometry args={[0.15, 0.2, 0.25]} />
+          <meshStandardMaterial color="#222222" metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[-0.6, 0.8, -1]}>
+          <boxGeometry args={[0.15, 0.2, 0.25]} />
+          <meshStandardMaterial color="#222222" metalness={0.8} roughness={0.2} />
+        </mesh>
       </group>
     </Float>
   );
 }
 
-// Secondary smaller gear
-function SmallGear({ position, speed = 0.5 }: { position: [number, number, number]; speed?: number }) {
+// Floating gears around the truck
+function FloatingGear({ position, scale = 1, speed = 0.5 }: { position: [number, number, number]; scale?: number; speed?: number }) {
   const gearRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (gearRef.current) {
-      gearRef.current.rotation.z = -state.clock.elapsedTime * speed;
+      gearRef.current.rotation.z = state.clock.elapsedTime * speed;
     }
   });
 
   return (
-    <group ref={gearRef} position={position} scale={0.4}>
-      <mesh>
-        <cylinderGeometry args={[0.8, 0.8, 0.2, 24]} />
-        <meshStandardMaterial
-          color="#666666"
-          metalness={0.85}
-          roughness={0.25}
-        />
-      </mesh>
-      {[...Array(8)].map((_, i) => {
-        const angle = (i / 8) * Math.PI * 2;
-        return (
-          <mesh
-            key={i}
-            position={[Math.cos(angle) * 0.9, 0, Math.sin(angle) * 0.9]}
-            rotation={[0, -angle, 0]}
-          >
-            <boxGeometry args={[0.2, 0.2, 0.25]} />
-            <meshStandardMaterial
-              color="#666666"
-              metalness={0.85}
-              roughness={0.25}
-            />
-          </mesh>
-        );
-      })}
-    </group>
+    <Float speed={2} floatIntensity={0.6}>
+      <group ref={gearRef} position={position} scale={scale}>
+        <mesh>
+          <cylinderGeometry args={[0.5, 0.5, 0.15, 24]} />
+          <meshStandardMaterial color="#E60012" metalness={0.85} roughness={0.2} transparent opacity={0.8} />
+        </mesh>
+        {[...Array(8)].map((_, i) => {
+          const angle = (i / 8) * Math.PI * 2;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(angle) * 0.6, 0, Math.sin(angle) * 0.6]}
+              rotation={[0, -angle, 0]}
+            >
+              <boxGeometry args={[0.15, 0.15, 0.2]} />
+              <meshStandardMaterial color="#E60012" metalness={0.85} roughness={0.2} transparent opacity={0.8} />
+            </mesh>
+          );
+        })}
+      </group>
+    </Float>
   );
 }
 
-// Floating bolts/nuts
+// Floating bolts
 function FloatingBolts() {
   const boltsRef = useRef<THREE.Group>(null);
 
   const bolts = useMemo(() => {
     const positions = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 6; i++) {
       positions.push({
-        x: (Math.random() - 0.5) * 8,
+        x: (Math.random() - 0.5) * 10,
         y: (Math.random() - 0.5) * 6,
-        z: (Math.random() - 0.5) * 4,
-        scale: 0.1 + Math.random() * 0.15,
+        z: -2 - Math.random() * 3,
+        scale: 0.08 + Math.random() * 0.1,
       });
     }
     return positions;
@@ -143,20 +207,22 @@ function FloatingBolts() {
 
   useFrame((state) => {
     if (boltsRef.current) {
-      boltsRef.current.rotation.y = state.clock.elapsedTime * 0.05;
+      boltsRef.current.rotation.y = state.clock.elapsedTime * 0.03;
     }
   });
 
   return (
     <group ref={boltsRef}>
       {bolts.map((bolt, i) => (
-        <Float key={i} speed={2 + i * 0.3} floatIntensity={0.8}>
+        <Float key={i} speed={1.5 + i * 0.2} floatIntensity={0.5}>
           <mesh position={[bolt.x, bolt.y, bolt.z]} scale={bolt.scale}>
-            <cylinderGeometry args={[1, 1, 0.8, 6]} />
+            <cylinderGeometry args={[1, 1, 0.6, 6]} />
             <meshStandardMaterial
-              color={i % 2 === 0 ? "#E60012" : "#888888"}
+              color={i % 2 === 0 ? "#E60012" : "#666666"}
               metalness={0.9}
               roughness={0.15}
+              transparent
+              opacity={0.6}
             />
           </mesh>
         </Float>
@@ -165,58 +231,25 @@ function FloatingBolts() {
   );
 }
 
-// Piston-like elements
-function PistonElement({ position }: { position: [number, number, number] }) {
-  const pistonRef = useRef<THREE.Group>(null);
+// Road lines beneath the truck
+function RoadLines() {
+  const linesRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (pistonRef.current) {
-      pistonRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 2) * 0.3;
+    if (linesRef.current) {
+      linesRef.current.position.x = ((state.clock.elapsedTime * 2) % 4) - 2;
     }
   });
 
   return (
-    <group ref={pistonRef} position={position}>
-      <mesh>
-        <cylinderGeometry args={[0.2, 0.2, 0.8, 16]} />
-        <meshStandardMaterial
-          color="#555555"
-          metalness={0.95}
-          roughness={0.1}
-        />
-      </mesh>
-      <mesh position={[0, 0.5, 0]}>
-        <cylinderGeometry args={[0.25, 0.25, 0.2, 16]} />
-        <meshStandardMaterial
-          color="#E60012"
-          metalness={0.9}
-          roughness={0.2}
-        />
-      </mesh>
+    <group position={[0, -1.2, 0]}>
+      {[-4, -2, 0, 2, 4].map((x, i) => (
+        <mesh key={i} position={[x, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.8, 0.1]} />
+          <meshStandardMaterial color="#E60012" transparent opacity={0.4} />
+        </mesh>
+      ))}
     </group>
-  );
-}
-
-// Circular track/ring representing wheels
-function WheelRing() {
-  const ringRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (ringRef.current) {
-      ringRef.current.rotation.x = state.clock.elapsedTime * 0.1;
-      ringRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-    }
-  });
-
-  return (
-    <mesh ref={ringRef}>
-      <torusGeometry args={[2.2, 0.08, 16, 64]} />
-      <meshStandardMaterial
-        color="#333333"
-        metalness={0.9}
-        roughness={0.1}
-      />
-    </mesh>
   );
 }
 
@@ -224,31 +257,29 @@ const ThreeScene = () => {
   return (
     <div className="absolute inset-0 z-0">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [0, 1, 7], fov: 40 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.4} />
+        <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.2} />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#E60012" />
+        <directionalLight position={[-5, 5, 5]} intensity={0.5} />
+        <pointLight position={[-10, -10, -5]} intensity={0.4} color="#E60012" />
         <pointLight position={[5, 5, 5]} intensity={0.3} color="#ffffff" />
         
-        {/* Main gear */}
-        <GearWheel />
+        {/* Main FUSO Truck */}
+        <FusoTruck />
         
-        {/* Secondary gears */}
-        <SmallGear position={[2.5, 1.2, -1]} speed={0.8} />
-        <SmallGear position={[-2.3, -1.5, -0.5]} speed={0.6} />
-        
-        {/* Wheel ring */}
-        <WheelRing />
-        
-        {/* Pistons */}
-        <PistonElement position={[-3, 0, -2]} />
-        <PistonElement position={[3.2, -0.5, -1.5]} />
+        {/* Floating gears */}
+        <FloatingGear position={[-3.5, 1.5, -2]} scale={0.5} speed={0.4} />
+        <FloatingGear position={[3.8, -1, -1.5]} scale={0.35} speed={-0.6} />
+        <FloatingGear position={[-4, -1.5, -1]} scale={0.3} speed={0.5} />
         
         {/* Floating bolts */}
         <FloatingBolts />
+        
+        {/* Road lines */}
+        <RoadLines />
       </Canvas>
     </div>
   );
