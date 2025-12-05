@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search, Bell, MessageCircle, User } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ThemeToggle from './ThemeToggle';
 import { cn } from '@/lib/utils';
 
 const Header = () => {
@@ -73,11 +72,8 @@ const Header = () => {
               <MessageCircle className="w-5 h-5" />
             </Link>
 
-            {/* Theme Toggle */}
-            <ThemeToggle />
-
             {/* Language Toggle */}
-            <div className="flex items-center gap-1 bg-secondary rounded-lg p-1 ml-1">
+            <div className="flex items-center gap-1 bg-secondary rounded-lg p-1 ml-2">
               <button
                 onClick={() => setLanguage('en')}
                 className={cn(
